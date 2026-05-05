@@ -4,11 +4,11 @@ import (
 	"fmt"
 
 	"golang.org/x/time/rate"
-	"gvisor.dev/gvisor/pkg/tcpip"
-	"gvisor.dev/gvisor/pkg/tcpip/network/ipv4"
-	"gvisor.dev/gvisor/pkg/tcpip/network/ipv6"
-	"gvisor.dev/gvisor/pkg/tcpip/stack"
-	"gvisor.dev/gvisor/pkg/tcpip/transport/tcp"
+	"github.com/noisysockets/netstack/pkg/tcpip"
+	"github.com/noisysockets/netstack/pkg/tcpip/network/ipv4"
+	"github.com/noisysockets/netstack/pkg/tcpip/network/ipv6"
+	"github.com/noisysockets/netstack/pkg/tcpip/stack"
+	"github.com/noisysockets/netstack/pkg/tcpip/transport/tcp"
 )
 
 const (
@@ -29,7 +29,7 @@ const (
 
 	// tcpCongestionControl is the congestion control algorithm used by
 	// stack. CUBIC is much faster than Reno for high-bandwidth networks.
-	tcpCongestionControlAlgorithm = "reno" // "reno" or "cubic"
+	tcpCongestionControlAlgorithm = "cubic" // "reno" or "cubic"
 
 	// tcpDelayEnabled is the value used by stack to enable or disable
 	// tcp delay option. Disable Nagle's algorithm here by default.
@@ -54,7 +54,7 @@ const (
 	tcpRXBufDefSize = tcp.DefaultReceiveBufferSize
 	// Max is used by gVisor to cap the advertised receive window post-read
 	// when tcp_moderate_rcvbuf=true (the default).
-	tcpRXBufMaxSize = 8 << 20 // 8MiB
+	tcpRXBufMaxSize = 32 << 20 // 8MiB
 
 	// TCP Transmit (TX) buffer sizes - for outgoing data
 	// Min is unused by gVisor at the time of writing.
@@ -62,7 +62,7 @@ const (
 	// Default is used by gVisor at socket creation.
 	tcpTXBufDefSize = tcp.DefaultSendBufferSize
 	// Max is used by gVisor to cap the send window.
-	tcpTXBufMaxSize = 6 << 20 // 6MiB
+	tcpTXBufMaxSize = 32 << 20 // 6MiB
 )
 
 type Option func(*stack.Stack) error

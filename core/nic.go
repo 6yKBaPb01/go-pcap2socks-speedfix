@@ -5,10 +5,10 @@ import (
 	"github.com/DaniilSokolyuk/go-pcap2socks/core/option"
 	"net"
 
-	"gvisor.dev/gvisor/pkg/tcpip"
-	"gvisor.dev/gvisor/pkg/tcpip/network/ipv4"
-	"gvisor.dev/gvisor/pkg/tcpip/network/ipv6"
-	"gvisor.dev/gvisor/pkg/tcpip/stack"
+	"github.com/noisysockets/netstack/pkg/tcpip"
+	"github.com/noisysockets/netstack/pkg/tcpip/network/ipv4"
+	"github.com/noisysockets/netstack/pkg/tcpip/network/ipv6"
+	"github.com/noisysockets/netstack/pkg/tcpip/stack"
 )
 
 const (

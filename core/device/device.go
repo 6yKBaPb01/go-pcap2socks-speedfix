@@ -3,7 +3,7 @@ package device
 import (
 	"net"
 
-	"gvisor.dev/gvisor/pkg/tcpip/stack"
+	"github.com/noisysockets/netstack/pkg/tcpip/stack"
 )
 
 // Device is the interface that implemented by network layer devices (e.g. tun),

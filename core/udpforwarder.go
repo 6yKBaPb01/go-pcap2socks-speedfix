@@ -23,12 +23,12 @@ import (
 	E "github.com/sagernet/sing/common/exceptions"
 	M "github.com/sagernet/sing/common/metadata"
 	N "github.com/sagernet/sing/common/network"
-	"gvisor.dev/gvisor/pkg/buffer"
-	"gvisor.dev/gvisor/pkg/tcpip"
-	"gvisor.dev/gvisor/pkg/tcpip/checksum"
-	"gvisor.dev/gvisor/pkg/tcpip/header"
-	"gvisor.dev/gvisor/pkg/tcpip/stack"
-	"gvisor.dev/gvisor/pkg/tcpip/transport/udp"
+	"github.com/noisysockets/netstack/pkg/buffer"
+	"github.com/noisysockets/netstack/pkg/tcpip"
+	"github.com/noisysockets/netstack/pkg/tcpip/checksum"
+	"github.com/noisysockets/netstack/pkg/tcpip/header"
+	"github.com/noisysockets/netstack/pkg/tcpip/stack"
+	"github.com/noisysockets/netstack/pkg/tcpip/transport/udp"
 )
 
 type Handler interface {

@@ -6,13 +6,13 @@ import (
 	"github.com/DaniilSokolyuk/go-pcap2socks/core/adapter"
 	"github.com/DaniilSokolyuk/go-pcap2socks/core/option"
 
-	glog "gvisor.dev/gvisor/pkg/log"
-	"gvisor.dev/gvisor/pkg/tcpip"
-	"gvisor.dev/gvisor/pkg/tcpip/adapters/gonet"
-	"gvisor.dev/gvisor/pkg/tcpip/header"
-	"gvisor.dev/gvisor/pkg/tcpip/stack"
-	"gvisor.dev/gvisor/pkg/tcpip/transport/tcp"
-	"gvisor.dev/gvisor/pkg/waiter"
+	glog "github.com/noisysockets/netstack/pkg/log"
+	"github.com/noisysockets/netstack/pkg/tcpip"
+	"github.com/noisysockets/netstack/pkg/tcpip/adapters/gonet"
+	"github.com/noisysockets/netstack/pkg/tcpip/header"
+	"github.com/noisysockets/netstack/pkg/tcpip/stack"
+	"github.com/noisysockets/netstack/pkg/tcpip/transport/tcp"
+	"github.com/noisysockets/netstack/pkg/waiter"
 )
 
 const (
@@ -39,11 +39,13 @@ const (
 	// tcpKeepaliveInterval specifies the interval
 	// time between sending TCP keepalive packets.
 	tcpKeepaliveInterval = 30 * time.Second
+
+	defaultOutQueueLen = 4096
 )
 
 func withTCPHandler(handle func(adapter.TCPConn)) option.Option {
 	return func(s *stack.Stack) error {
-		tcpForwarder := tcp.NewForwarder(s, defaultWndSize, maxConnAttempts, func(r *tcp.ForwarderRequest) {
+		tcpForwarder := tcp.NewForwarder(s, defaultWndSize, defaultOutQueueLen, func(r *tcp.ForwarderRequest) {
 			var (
 				wq  waiter.Queue
 				ep  tcpip.Endpoint

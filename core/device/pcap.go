@@ -14,10 +14,10 @@ import (
 	"github.com/gopacket/gopacket"
 	"github.com/gopacket/gopacket/layers"
 	"github.com/gopacket/gopacket/pcap"
-	"gvisor.dev/gvisor/pkg/tcpip"
-	"gvisor.dev/gvisor/pkg/tcpip/header"
-	"gvisor.dev/gvisor/pkg/tcpip/link/ethernet"
-	"gvisor.dev/gvisor/pkg/tcpip/stack"
+	"github.com/noisysockets/netstack/pkg/tcpip"
+	"github.com/noisysockets/netstack/pkg/tcpip/header"
+	"github.com/noisysockets/netstack/pkg/tcpip/link/ethernet"
+	"github.com/noisysockets/netstack/pkg/tcpip/stack"
 )
 
 type PCAP struct {
@@ -160,7 +160,7 @@ func createPcapHandle(dev pcap.Interface) (*pcap.InactiveHandle, error) {
 		return nil, fmt.Errorf("set immediate mode error: %w", err)
 	}
 
-	err = handle.SetBufferSize(512 * 1024)
+	err = handle.SetBufferSize(32 * 1024 * 1024)
 	if err != nil {
 		return nil, fmt.Errorf("set buffer size error: %w", err)
 	}
@@ -173,7 +173,6 @@ func (t *PCAP) Read() []byte {
 	defer t.rMux.Unlock()
 	data, _, err := t.handle.ZeroCopyReadPacketData()
 	if err != nil {
-		slog.Error("read packet error: %w", slog.Any("err", err))
 		return nil
 	}
 
@@ -218,7 +217,6 @@ func (t *PCAP) Read() []byte {
 func (t *PCAP) Write(p []byte) (n int, err error) {
 	err = t.handle.WritePacketData(p)
 	if err != nil {
-		slog.Error("write packet error: %w", slog.Any("err", err))
 		return 0, nil
 	}
 

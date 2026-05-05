@@ -21,7 +21,7 @@ import (
 	"github.com/DaniilSokolyuk/go-pcap2socks/core/option"
 	"github.com/DaniilSokolyuk/go-pcap2socks/proxy"
 	"github.com/jackpal/gateway"
-	"gvisor.dev/gvisor/pkg/tcpip/stack"
+	"github.com/noisysockets/netstack/pkg/tcpip/stack"
 )
 
 //go:embed config.json

@@ -3,7 +3,7 @@ package tunnel
 import (
 	"github.com/DaniilSokolyuk/go-pcap2socks/common/pool"
 	"github.com/DaniilSokolyuk/go-pcap2socks/core/adapter"
-	"gvisor.dev/gvisor/pkg/log"
+	"github.com/noisysockets/netstack/pkg/log"
 	"io"
 	"log/slog"
 	"net"

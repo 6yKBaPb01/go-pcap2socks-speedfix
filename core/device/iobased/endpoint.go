@@ -10,17 +10,17 @@ import (
 	"net"
 	"sync"
 
-	"gvisor.dev/gvisor/pkg/buffer"
-	"gvisor.dev/gvisor/pkg/tcpip"
-	"gvisor.dev/gvisor/pkg/tcpip/header"
-	"gvisor.dev/gvisor/pkg/tcpip/link/channel"
-	"gvisor.dev/gvisor/pkg/tcpip/stack"
+	"github.com/noisysockets/netstack/pkg/buffer"
+	"github.com/noisysockets/netstack/pkg/tcpip"
+	"github.com/noisysockets/netstack/pkg/tcpip/header"
+	"github.com/noisysockets/netstack/pkg/tcpip/link/channel"
+	"github.com/noisysockets/netstack/pkg/tcpip/stack"
 )
 
 const (
 	// Queue length for outbound packet, arriving for read. Overflow
 	// causes packet drops.
-	defaultOutQueueLen = 1 << 10
+	defaultOutQueueLen = 1 << 12
 )
 
 // Endpoint implements the interface of stack.LinkEndpoint from io.ReadWriter.
