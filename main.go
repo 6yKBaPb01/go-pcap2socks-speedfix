@@ -183,11 +183,6 @@ func run(cfg *cfg.Config) error {
     return fmt.Errorf("failed to disable RACK: %w", err)
 }
 
-	sackOpt := tcpip.TCPSACKEnabled(false)
-	if err := _defaultStack.SetTransportProtocolOption(tcp.ProtocolNumber, &sackOpt); err != nil {
-    return fmt.Errorf("failed to disable SACK: %w", err)
-}
-
 	_currentCfg = cfg
 	return nil
 }
