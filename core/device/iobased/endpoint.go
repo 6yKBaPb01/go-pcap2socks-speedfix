@@ -10,11 +10,11 @@ import (
 	"net"
 	"sync"
 
-	"github.com/noisysockets/netstack/pkg/buffer"
-	"github.com/noisysockets/netstack/pkg/tcpip"
-	"github.com/noisysockets/netstack/pkg/tcpip/header"
-	"github.com/noisysockets/netstack/pkg/tcpip/link/channel"
-	"github.com/noisysockets/netstack/pkg/tcpip/stack"
+	"gvisor.dev/gvisor/pkg/buffer"
+	"gvisor.dev/gvisor/pkg/tcpip"
+	"gvisor.dev/gvisor/pkg/tcpip/header"
+	"gvisor.dev/gvisor/pkg/tcpip/link/channel"
+	"gvisor.dev/gvisor/pkg/tcpip/stack"
 )
 
 const (

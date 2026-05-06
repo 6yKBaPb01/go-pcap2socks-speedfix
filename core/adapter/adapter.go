@@ -2,7 +2,7 @@ package adapter
 
 import (
 	M "github.com/DaniilSokolyuk/go-pcap2socks/md"
-	"github.com/noisysockets/netstack/pkg/tcpip/stack"
+	"gvisor.dev/gvisor/pkg/tcpip/stack"
 
 	"net"
 )

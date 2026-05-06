@@ -11,9 +11,9 @@ import (
 	"github.com/gopacket/gopacket"
 	"github.com/gopacket/gopacket/layers"
 	"github.com/gopacket/gopacket/pcapgo"
-	"github.com/noisysockets/netstack/pkg/tcpip"
-	"github.com/noisysockets/netstack/pkg/tcpip/link/nested"
-	"github.com/noisysockets/netstack/pkg/tcpip/stack"
+	"gvisor.dev/gvisor/pkg/tcpip"
+	"gvisor.dev/gvisor/pkg/tcpip/link/nested"
+	"gvisor.dev/gvisor/pkg/tcpip/stack"
 )
 
 // pcapPacket represents a packet to be written to the PCAP file

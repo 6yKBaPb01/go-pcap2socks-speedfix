@@ -23,17 +23,19 @@ import (
 	"github.com/DaniilSokolyuk/go-pcap2socks/core/device"
 	"github.com/DaniilSokolyuk/go-pcap2socks/core/option"
 	"github.com/DaniilSokolyuk/go-pcap2socks/proxy"
-	"github.com/jackpal/gateway"
-	"github.com/noisysockets/netstack/pkg/tcpip/stack"
+	"github.com/jackpal/gateway" 
+	"gvisor.dev/gvisor/pkg/tcpip"
+    "gvisor.dev/gvisor/pkg/tcpip/transport/tcp"
+    "gvisor.dev/gvisor/pkg/tcpip/stack"
 )
 
 //go:embed config.json
 var configData string
 
 var (
-	_defaultDevice device.Device
-	_defaultStack  *stack.Stack
-	_currentCfg    *cfg.Config
+    _defaultDevice device.Device
+    _defaultStack  *stack.Stack
+    _currentCfg    *cfg.Config
 )
 
 func main() {
@@ -175,6 +177,16 @@ func run(cfg *cfg.Config) error {
 		return fmt.Errorf("create stack: %w", err)
 	}
 	_defaultStack = stack
+
+	recoveryOpt := tcpip.TCPRecovery(0)
+	if err := _defaultStack.SetTransportProtocolOption(tcp.ProtocolNumber, &recoveryOpt); err != nil {
+    return fmt.Errorf("failed to disable RACK: %w", err)
+}
+
+	sackOpt := tcpip.TCPSACKEnabled(false)
+	if err := _defaultStack.SetTransportProtocolOption(tcp.ProtocolNumber, &sackOpt); err != nil {
+    return fmt.Errorf("failed to disable SACK: %w", err)
+}
 
 	_currentCfg = cfg
 	return nil

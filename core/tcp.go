@@ -6,13 +6,13 @@ import (
 	"github.com/DaniilSokolyuk/go-pcap2socks/core/adapter"
 	"github.com/DaniilSokolyuk/go-pcap2socks/core/option"
 
-	glog "github.com/noisysockets/netstack/pkg/log"
-	"github.com/noisysockets/netstack/pkg/tcpip"
-	"github.com/noisysockets/netstack/pkg/tcpip/adapters/gonet"
-	"github.com/noisysockets/netstack/pkg/tcpip/header"
-	"github.com/noisysockets/netstack/pkg/tcpip/stack"
-	"github.com/noisysockets/netstack/pkg/tcpip/transport/tcp"
-	"github.com/noisysockets/netstack/pkg/waiter"
+	"gvisor.dev/gvisor/pkg/log"      // ← было log "gvisor.dev/gvisor/pkg/log"
+    "gvisor.dev/gvisor/pkg/tcpip"
+    "gvisor.dev/gvisor/pkg/tcpip/adapters/gonet"
+    "gvisor.dev/gvisor/pkg/tcpip/header"
+    "gvisor.dev/gvisor/pkg/tcpip/stack"
+    "gvisor.dev/gvisor/pkg/tcpip/transport/tcp"
+    "gvisor.dev/gvisor/pkg/waiter"
 )
 
 const (
@@ -55,7 +55,7 @@ func withTCPHandler(handle func(adapter.TCPConn)) option.Option {
 
 			defer func() {
 				if err != nil {
-					glog.Debugf("forward tcp request: %s:%d->%s:%d: %s",
+					log.Debugf("forward tcp request: %s:%d->%s:%d: %s",
 						id.RemoteAddress, id.RemotePort, id.LocalAddress, id.LocalPort, err)
 				}
 			}()

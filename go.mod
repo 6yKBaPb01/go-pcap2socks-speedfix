@@ -5,15 +5,16 @@ go 1.25.5
 require (
 	github.com/anacrolix/log v0.17.0
 	github.com/anacrolix/upnp v0.1.4
+	github.com/fsnotify/fsnotify v1.10.1
 	github.com/gopacket/gopacket v1.5.0
 	github.com/jackpal/gateway v1.1.1
 	github.com/miekg/dns v1.1.68
-	github.com/noisysockets/netstack v0.9.0
 	github.com/sagernet/sing v0.7.12
 	github.com/stretchr/testify v1.11.1
 	go.uber.org/atomic v1.11.0
 	golang.org/x/sys v0.38.0
 	golang.org/x/time v0.14.0
+	gvisor.dev/gvisor v0.0.0-20250205023644-9414b50a5633
 )
 
 require (

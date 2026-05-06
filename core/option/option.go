@@ -4,11 +4,11 @@ import (
 	"fmt"
 
 	"golang.org/x/time/rate"
-	"github.com/noisysockets/netstack/pkg/tcpip"
-	"github.com/noisysockets/netstack/pkg/tcpip/network/ipv4"
-	"github.com/noisysockets/netstack/pkg/tcpip/network/ipv6"
-	"github.com/noisysockets/netstack/pkg/tcpip/stack"
-	"github.com/noisysockets/netstack/pkg/tcpip/transport/tcp"
+	"gvisor.dev/gvisor/pkg/tcpip"
+    "gvisor.dev/gvisor/pkg/tcpip/network/ipv4"
+    "gvisor.dev/gvisor/pkg/tcpip/network/ipv6"
+    "gvisor.dev/gvisor/pkg/tcpip/stack"
+    "gvisor.dev/gvisor/pkg/tcpip/transport/tcp"
 )
 
 const (

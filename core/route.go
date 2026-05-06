@@ -2,9 +2,9 @@ package core
 
 import (
 	"github.com/DaniilSokolyuk/go-pcap2socks/core/option"
-	"github.com/noisysockets/netstack/pkg/tcpip"
-	"github.com/noisysockets/netstack/pkg/tcpip/header"
-	"github.com/noisysockets/netstack/pkg/tcpip/stack"
+	"gvisor.dev/gvisor/pkg/tcpip"
+    "gvisor.dev/gvisor/pkg/tcpip/header"
+    "gvisor.dev/gvisor/pkg/tcpip/stack"
 )
 
 func withRouteTable(nicID tcpip.NICID) option.Option {

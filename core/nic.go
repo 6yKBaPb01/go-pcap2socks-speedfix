@@ -2,13 +2,13 @@ package core
 
 import (
 	"fmt"
-	"github.com/DaniilSokolyuk/go-pcap2socks/core/option"
 	"net"
 
-	"github.com/noisysockets/netstack/pkg/tcpip"
-	"github.com/noisysockets/netstack/pkg/tcpip/network/ipv4"
-	"github.com/noisysockets/netstack/pkg/tcpip/network/ipv6"
-	"github.com/noisysockets/netstack/pkg/tcpip/stack"
+    "gvisor.dev/gvisor/pkg/tcpip"
+    "gvisor.dev/gvisor/pkg/tcpip/network/ipv4"
+    "gvisor.dev/gvisor/pkg/tcpip/network/ipv6"
+    "gvisor.dev/gvisor/pkg/tcpip/stack"
+	"github.com/DaniilSokolyuk/go-pcap2socks/core/option"
 )
 
 const (

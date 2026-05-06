@@ -14,10 +14,10 @@ import (
 	"github.com/gopacket/gopacket"
 	"github.com/gopacket/gopacket/layers"
 	"github.com/gopacket/gopacket/pcap"
-	"github.com/noisysockets/netstack/pkg/tcpip"
-	"github.com/noisysockets/netstack/pkg/tcpip/header"
-	"github.com/noisysockets/netstack/pkg/tcpip/link/ethernet"
-	"github.com/noisysockets/netstack/pkg/tcpip/stack"
+	"gvisor.dev/gvisor/pkg/tcpip"
+	"gvisor.dev/gvisor/pkg/tcpip/header"
+	"gvisor.dev/gvisor/pkg/tcpip/link/ethernet"
+	"gvisor.dev/gvisor/pkg/tcpip/stack"
 )
 
 type PCAP struct {
