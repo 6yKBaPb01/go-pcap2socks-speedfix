@@ -11,24 +11,23 @@ import (
 	"sync"
 	"time"
 
-	"github.com/DaniilSokolyuk/go-pcap2socks/tunnel"
-	"github.com/sagernet/sing/common"
-	"github.com/sagernet/sing/common/udpnat"
-
 	"github.com/DaniilSokolyuk/go-pcap2socks/core/adapter"
 	"github.com/DaniilSokolyuk/go-pcap2socks/core/option"
 	"github.com/DaniilSokolyuk/go-pcap2socks/md"
 	MM "github.com/DaniilSokolyuk/go-pcap2socks/md"
+	"github.com/DaniilSokolyuk/go-pcap2socks/tunnel"
+	"github.com/sagernet/sing/common"
 	"github.com/sagernet/sing/common/buf"
 	E "github.com/sagernet/sing/common/exceptions"
 	M "github.com/sagernet/sing/common/metadata"
 	N "github.com/sagernet/sing/common/network"
+	"github.com/sagernet/sing/common/udpnat"
 	"gvisor.dev/gvisor/pkg/buffer"
-    "gvisor.dev/gvisor/pkg/tcpip"
-    "gvisor.dev/gvisor/pkg/tcpip/checksum"
-    "gvisor.dev/gvisor/pkg/tcpip/header"
-    "gvisor.dev/gvisor/pkg/tcpip/stack"
-    "gvisor.dev/gvisor/pkg/tcpip/transport/udp"
+	"gvisor.dev/gvisor/pkg/tcpip"
+	"gvisor.dev/gvisor/pkg/tcpip/checksum"
+	"gvisor.dev/gvisor/pkg/tcpip/header"
+	"gvisor.dev/gvisor/pkg/tcpip/stack"
+	"gvisor.dev/gvisor/pkg/tcpip/transport/udp"
 )
 
 type Handler interface {
@@ -131,10 +130,6 @@ type UDPForwarder struct {
 	ctx    context.Context
 	stack  *stack.Stack
 	udpNat *udpnat.Service[netip.AddrPort]
-
-	// cache
-	cacheProto tcpip.NetworkProtocolNumber
-	cacheID    stack.TransportEndpointID
 }
 
 func NewUDPForwarder(ctx context.Context, stack *stack.Stack, handler Handler, udpTimeout int64) *UDPForwarder {
@@ -149,34 +144,35 @@ func (f *UDPForwarder) HandlePacket(id stack.TransportEndpointID, pkt *stack.Pac
 	var upstreamMetadata M.Metadata
 	upstreamMetadata.Source = M.SocksaddrFrom(AddrFromAddress(id.RemoteAddress), id.RemotePort)
 	upstreamMetadata.Destination = M.SocksaddrFrom(AddrFromAddress(id.LocalAddress), id.LocalPort)
-	if upstreamMetadata.Source.IsIPv4() {
-		f.cacheProto = header.IPv4ProtocolNumber
-	} else {
-		f.cacheProto = header.IPv6ProtocolNumber
-	}
+
 	gBuffer := pkt.Data().ToBuffer()
 	sBuffer := buf.NewSize(int(gBuffer.Size()))
 	gBuffer.Apply(func(view *buffer.View) {
 		sBuffer.Write(view.AsSlice())
 	})
-	f.cacheID = id
+
+	// Исправленная версия без гонки: создаём writer внутри замыкания с актуальным id
 	f.udpNat.NewPacket(
 		f.ctx,
 		upstreamMetadata.Source.AddrPort(),
 		sBuffer,
 		upstreamMetadata,
-		f.newUDPConn,
+		func(natConn N.PacketConn) N.PacketWriter {
+			var sourceNetwork tcpip.NetworkProtocolNumber
+			if id.RemoteAddress.Len() == 4 {
+				sourceNetwork = header.IPv4ProtocolNumber
+			} else {
+				sourceNetwork = header.IPv6ProtocolNumber
+			}
+			return &UDPBackWriter{
+				stack:         f.stack,
+				source:        id.RemoteAddress,
+				sourcePort:    id.RemotePort,
+				sourceNetwork: sourceNetwork,
+			}
+		},
 	)
 	return true
-}
-
-func (f *UDPForwarder) newUDPConn(natConn N.PacketConn) N.PacketWriter {
-	return &UDPBackWriter{
-		stack:         f.stack,
-		source:        f.cacheID.RemoteAddress,
-		sourcePort:    f.cacheID.RemotePort,
-		sourceNetwork: f.cacheProto,
-	}
 }
 
 type UDPBackWriter struct {
@@ -219,9 +215,10 @@ func (w *UDPBackWriter) WritePacket(packetBuffer *buf.Buffer, destination M.Sock
 	packet.TransportProtocolNumber = header.UDPProtocolNumber
 	udpHdr := header.UDP(packet.TransportHeader().Push(header.UDPMinimumSize))
 	pLen := uint16(packet.Size())
+	// ИСХОДНАЯ СХЕМА ПОРТОВ (как в работающей версии)
 	udpHdr.Encode(&header.UDPFields{
-		SrcPort: destination.Port,
-		DstPort: w.sourcePort,
+		SrcPort: destination.Port, // порт, переданный udpnat (клиент или сервер – зависит от библиотеки)
+		DstPort: w.sourcePort,     // порт клиента (PS4)
 		Length:  pLen,
 	})
 

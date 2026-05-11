@@ -86,11 +86,6 @@ func setSocketOptions(s *stack.Stack, ep tcpip.Endpoint) tcpip.Error {
 	{ /* TCP keepalive options */
 		ep.SocketOptions().SetKeepAlive(true)
 
-		idle := tcpip.KeepaliveIdleOption(tcpKeepaliveIdle)
-		if err := ep.SetSockOpt(&idle); err != nil {
-			return err
-		}
-
 		interval := tcpip.KeepaliveIntervalOption(tcpKeepaliveInterval)
 		if err := ep.SetSockOpt(&interval); err != nil {
 			return err
@@ -100,6 +95,10 @@ func setSocketOptions(s *stack.Stack, ep tcpip.Endpoint) tcpip.Error {
 			return err
 		}
 	}
+
+	// Отключаем алгоритм Нейгла (TCP_NODELAY)
+	ep.SocketOptions().SetDelayOption(false)
+
 	{ /* TCP recv/send buffer size */
 		var ss tcpip.TCPSendBufferSizeRangeOption
 		if err := s.TransportProtocolOption(header.TCPProtocolNumber, &ss); err == nil {
@@ -111,6 +110,7 @@ func setSocketOptions(s *stack.Stack, ep tcpip.Endpoint) tcpip.Error {
 			ep.SocketOptions().SetReceiveBufferSize(int64(rs.Default), false)
 		}
 	}
+
 	return nil
 }
 
